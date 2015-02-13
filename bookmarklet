@@ -1,0 +1,1 @@
+javascript:var%20bm%20=%20document.createElement('SCRIPT');bm.type='text/javascript';bm.src='http://d4vidh4mm3r.github.io/ovidsh/javascripts/cinahl.js';document.getElementsByTagName('head')[0].appendChild(bm);void(0);
