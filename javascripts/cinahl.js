@@ -22,11 +22,16 @@ function trim(t) {
 	return t.replace(/[ \n\t]+/gm, " ").strip();
 }
 
+function removeTable() {
+	var theTable = document.getElementById("search-history-clean");
+	theTable.parentNode.removeChild(theTable);
+}
+
 function makeTable() {
 	var ids     = document.getElementsByClassName("searchID");
 	var terms   = document.getElementsByClassName("searchTerms");
 	var options = document.getElementsByClassName("historyoptions");
-	var hits   = document.getElementsByClassName("actions");
+	var hits    = document.getElementsByClassName("actions");
 	var out = "";
 	for (var i = 1; i < ids.length; i++) {
 		out = out + extractId(ids[i]) + "\t" +
@@ -38,7 +43,9 @@ function makeTable() {
 }
 
 var resTable       = document.createElement("div");
-resTable.innerHTML = "<div width=200 height=300><pre>" + makeTable() + "</pre></div>";
+var removeButton   = "<button onclick='removeTable()'>Remove this table</button>"
+resTable.id        = "search-history-clean";
+resTable.innerHTML = removeButten + "<div><pre>" + makeTable() + "</pre></div>";
 resTable.style     = "font-size: 12pt;";
 var parentNode     = document.getElementById("content")
 var beforeNode     = parentNode.getElementsByTagName("div")[0]
