@@ -1,8 +1,6 @@
-ovidsh
-======
+# Fork of ovidsh
 
-OvidSP search history saving bookmarklet
+See http://ipoga.github.io/ovidsh or http://d4vidh4mm3r.github.io/ovidsh/
 
-Save the bookmarklet from http://ipoga.github.io/ovidsh to generate a machine-
-readable search history from the OvidSP search interface.
-
+This repo contains some javascript code which is used by some bookmarklets to assist in copying
+search histories from Ovid or Cinahl.
