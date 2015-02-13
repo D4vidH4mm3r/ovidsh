@@ -1,15 +1,42 @@
-var ids = document.getElementsByClassName("searchhistory-col-Num");
-var terms = document.getElementsByClassName("searchhistory-search-term");
-var hits = document.getElementsByClassName("searchhistory-col-Results");
-var out1 = "";
-var out2 = "";
-for (var i = 0; i < ids.length - 1; i++) {
-    var id = ids[i + 1].innerHTML;
-    var term = terms[i].innerHTML;
-    var hit = hits[i + 1].innerHTML;
-    out1 = out1 + id + "\t" + term + "\t" + hit + "\n";
-    out2 = out2 + term + "\n";
+function extractText(e) {
+	return e.textContent;
 }
-var h = document.createElement("div");
-document.body.appendChild(h);
-h.innerHTML = "<div width=200 height=300><pre>" + out1 + "<br/><br/>" + out2 + "</pre></div>";
+
+function removeTable() {
+	var theTable   = document.getElementById("search-history-clean");
+	var theOverlay = document.getElementById("search-history-overlay");
+	document.body.removeChild(theTable);
+	document.body.removeChild(theOverlay);
+}
+
+function makeTable() {
+	var ids   = document.getElementsByClassName("searchhistory-col-Num");
+	var terms = document.getElementsByClassName("searchhistory-col-SearchHistory");
+	var hits  = document.getElementsByClassName("searchhistory-col-Results");
+	var out   = "ID	term(s)	results\n";
+	for (var i = 1; i < ids.length; i++) {
+		out = out + extractText(ids[i]) + "\t" +
+			extractText(terms[i]) + "\t" +
+			extractText(hits[i]) + "\n";
+	}
+	return out;
+}
+
+var removeButton       = "<button onclick='removeTable()'>Remove this table</button><br><br>"
+
+var overlay            = document.createElement("div");
+document.body.appendChild(overlay);
+overlay.onclick        = removeTable;
+overlay.id             = "search-history-overlay";
+overlay.style.cssText  = "background-color: black;" + "opacity: 0.7;" +
+"zIndex: 1000;" + "position: absolute;" + "top: 0;" + "left: 0;" +
+"width: 100%;" + "height: 100%;"
+
+var resTable           = document.createElement("div");
+document.body.appendChild(resTable);
+resTable.id            = "search-history-clean"
+resTable.innerHTML     = removeButton + "<div><pre>" + makeTable() + "<br/><br/>" + "</pre></div>";
+resTable.style.cssText = "background-color: white;" +
+"z-index: 1001;" + "position: absolute;" + "float: left;" + "top: 40px;" +
+"width: 956px;" + "padding: 10px;" +
+"border: 2px solid black;"
