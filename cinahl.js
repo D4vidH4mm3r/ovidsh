@@ -22,9 +22,11 @@ function trim(t) {
 	return t.replace(/[ \n\t]+/gm, " ").strip();
 }
 
-function removeTable() {
-	var theTable = document.getElementById("search-history-clean");
-	theTable.parentNode.removeChild(theTable);
+function makeRemover(table, overlay) {
+	return function() {
+		document.body.removeChild(table);
+		document.body.removeChild(overlay);
+	}
 }
 
 function makeTable() {
@@ -42,10 +44,22 @@ function makeTable() {
 	return out;
 }
 
-var resTable       = document.createElement("div");
-var removeButton   = "<button onclick='removeTable()'>Remove this table</button>"
-resTable.id        = "search-history-clean";
-resTable.innerHTML = removeButton + "<div><pre>" + makeTable() + "</pre></div>";
-var parentNode     = document.getElementById("content")
-var beforeNode     = parentNode.getElementsByTagName("div")[0]
-parentNode.insertBefore(resTable, beforeNode);
+var removeButton = "<button onclick='resRemove()'>Remove this table</button>"
+
+var resTable           = document.createElement("div");
+resTable.innerHTML     = removeButton + "<div><pre>" + makeTable() + "</pre></div>";
+resTable.style.cssText += "background-color: white;" +
+"z-index: 1001;" + "position: fixed;" + "float: left;" + "top: 40px;" + "left: 5%;" +
+"width: 90%;" + "padding: 10px;" +
+"border: 2px solid black;"
+
+var resOverlay           = document.createElement("div");
+resOverlay.style.cssText = "background-color: black;" + "opacity: 0.7;" +
+"z-index: 1000;" + "position: fixed;" + "top: 0;" + "left: 0;" +
+"width: 100%;" + "height: 100%;"
+
+var resRemove      = makeRemover(resTable, resOverlay);
+resOverlay.onclick = resRemove;
+
+document.body.appendChild(resOverlay);
+document.body.appendChild(resTable);
