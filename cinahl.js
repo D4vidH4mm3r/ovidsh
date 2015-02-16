@@ -45,7 +45,7 @@ function makeTable() {
 var resTable       = document.createElement("div");
 var removeButton   = "<button onclick='removeTable()'>Remove this table</button>"
 resTable.id        = "search-history-clean";
-resTable.innerHTML = removeButten + "<div><pre>" + makeTable() + "</pre></div>";
+resTable.innerHTML = removeButton + "<div><pre>" + makeTable() + "</pre></div>";
 var parentNode     = document.getElementById("content")
 var beforeNode     = parentNode.getElementsByTagName("div")[0]
 parentNode.insertBefore(resTable, beforeNode);
