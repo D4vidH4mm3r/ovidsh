@@ -34,7 +34,7 @@ function makeTable() {
 	var terms   = document.getElementsByClassName("searchTerms");
 	var options = document.getElementsByClassName("historyoptions");
 	var hits    = document.getElementsByClassName("actions");
-	var out = "";
+	var out = "ID	term(s)	options	results\n";
 	for (var i = 1; i < ids.length; i++) {
 		out = out + extractId(ids[i]) + "\t" +
 			extractTerms(terms[i]) + "\t" +
@@ -44,11 +44,25 @@ function makeTable() {
 	return out;
 }
 
+function makeSelect(e) {
+	return function() {
+		e.focus();
+		e.select();
+	}
+}
+
 var removeButton = "<button onclick='resRemove()'>Remove this table</button>"
 
-var resTable           = document.createElement("div");
-resTable.innerHTML     = removeButton + "<div><pre>" + makeTable() + "</pre></div>";
-resTable.style.cssText += "background-color: white;" +
+var resTable = makeTable();
+
+var resText = document.createElement("textarea");
+resText.rows = resTable.split("\n").length;
+resText.style.cssText = "width: 100%;";
+resText.innerHTML = resTable;
+
+var resDiv           = document.createElement("div");
+resDiv.innerHTML     = removeButton;
+resDiv.style.cssText = "background-color: white;" +
 "z-index: 1001;" + "position: fixed;" + "float: left;" + "top: 40px;" + "left: 5%;" +
 "width: 90%;" + "padding: 10px;" +
 "border: 2px solid black;"
@@ -58,8 +72,11 @@ resOverlay.style.cssText = "background-color: black;" + "opacity: 0.7;" +
 "z-index: 1000;" + "position: fixed;" + "top: 0;" + "left: 0;" +
 "width: 100%;" + "height: 100%;"
 
-var resRemove      = makeRemover(resTable, resOverlay);
+var resRemove      = makeRemover(resDiv, resOverlay);
 resOverlay.onclick = resRemove;
+var textSelect = makeSelect(resText);
+resText.onclick = textSelect;
 
 document.body.appendChild(resOverlay);
-document.body.appendChild(resTable);
+document.body.appendChild(resDiv);
+resDiv.appendChild(resText);
