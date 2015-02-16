@@ -2,11 +2,11 @@ function extractText(e) {
 	return e.textContent;
 }
 
-function removeTable() {
-	var theTable   = document.getElementById("search-history-clean");
-	var theOverlay = document.getElementById("search-history-overlay");
-	document.body.removeChild(theTable);
-	document.body.removeChild(theOverlay);
+function makeRemover(table, overlay) {
+	return function() {
+		document.body.removeChild(table);
+		document.body.removeChild(overlay);
+	}
 }
 
 function makeTable() {
@@ -22,21 +22,35 @@ function makeTable() {
 	return out;
 }
 
-var removeButton       = "<button onclick='removeTable()'>Remove this table</button><br><br>"
+function makeSelect(e) {
+	return function() {
+		e.focus();
+		e.select();
+	}
+}
 
-var overlay            = document.createElement("div");
-document.body.appendChild(overlay);
-overlay.onclick        = removeTable;
-overlay.id             = "search-history-overlay";
-overlay.style.cssText  = "background-color: black;" + "opacity: 0.7;" +
-"z-index: 1000;" + "position: absolute;" + "top: 0;" + "left: 0;" +
-"width: 100%;" + "height: 100%;"
+var resTable = makeTable();
 
-var resTable           = document.createElement("div");
-document.body.appendChild(resTable);
-resTable.id            = "search-history-clean"
-resTable.innerHTML     = removeButton + "<div><pre>" + makeTable() + "<br/><br/>" + "</pre></div>";
-resTable.style.cssText = "background-color: white;" +
-"z-index: 1001;" + "position: absolute;" + "float: left;" + "top: 40px;" +
-"width: 956px;" + "padding: 10px;" +
+var resText = document.createElement("textarea");
+resText.rows = resTable.split("\n").length;
+resText.style.cssText = "width: 100%;";
+resText.innerHTML = resTable;
+
+var resDiv = document.createElement("div");
+resDiv.innerHTML = "Click anywhere outside this box to close it.";
+resDiv.style.cssText = "background-color: white;" +
+"z-index: 1001;" + "position: fixed;" + "float: left;" + "top: 40px;" +
+"min-width: 800px;" + "padding: 10px;" +
 "border: 2px solid black;"
+
+var resOverlay = document.createElement("div");
+resOverlay.style.cssText = "background-color: black;" + "opacity: 0.7;" +
+"z-index: 1000;" + "position: fixed;" + "top: 0;" + "left: 0;" +
+"width: 100%;" + "height: 100%;";
+
+resOverlay.onclick = makeRemover(resDiv, resOverlay);
+resText.onclick = makeSelect(resText);
+
+resDiv.appendChild(resText);
+document.body.appendChild(resOverlay);
+document.body.appendChild(resDiv);
