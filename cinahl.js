@@ -51,8 +51,6 @@ function makeSelect(e) {
 	}
 }
 
-var removeButton = "<button onclick='resRemove()'>Remove this table</button>"
-
 var resTable = makeTable();
 
 var resText = document.createElement("textarea");
@@ -61,7 +59,7 @@ resText.style.cssText = "width: 100%;";
 resText.innerHTML = resTable;
 
 var resDiv           = document.createElement("div");
-resDiv.innerHTML     = removeButton;
+resDiv.innerHTML     = "Click anywhere outside this box to close it.";
 resDiv.style.cssText = "background-color: white;" +
 "z-index: 1001;" + "position: fixed;" + "float: left;" + "top: 40px;" + "left: 5%;" +
 "width: 90%;" + "padding: 10px;" +
@@ -72,10 +70,8 @@ resOverlay.style.cssText = "background-color: black;" + "opacity: 0.7;" +
 "z-index: 1000;" + "position: fixed;" + "top: 0;" + "left: 0;" +
 "width: 100%;" + "height: 100%;"
 
-var resRemove      = makeRemover(resDiv, resOverlay);
-resOverlay.onclick = resRemove;
-var textSelect = makeSelect(resText);
-resText.onclick = textSelect;
+resOverlay.onclick = makeRemover(resDiv, resOverlay);
+resText.onclick = makeSelect(resText);
 
 document.body.appendChild(resOverlay);
 document.body.appendChild(resDiv);
