@@ -30,7 +30,6 @@ resOverlay.style.cssText = "background-color: black;" + "opacity: 0.7;" +
 "width: 100%;" + "height: 100%;"
 
 var resTable           = document.createElement("div");
-resTable.id            = "search-history-clean"
 resTable.innerHTML     = removeButton + "<div><pre>" + makeTable() + "<br/><br/>" + "</pre></div>";
 resTable.style.cssText = "background-color: white;" +
 "z-index: 1001;" + "position: fixed;" + "float: left;" + "top: 40px;" +
