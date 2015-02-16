@@ -29,7 +29,7 @@ document.body.appendChild(overlay);
 overlay.onclick        = removeTable;
 overlay.id             = "search-history-overlay";
 overlay.style.cssText  = "background-color: black;" + "opacity: 0.7;" +
-"zIndex: 1000;" + "position: absolute;" + "top: 0;" + "left: 0;" +
+"z-index: 1000;" + "position: absolute;" + "top: 0;" + "left: 0;" +
 "width: 100%;" + "height: 100%;"
 
 var resTable           = document.createElement("div");
