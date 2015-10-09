@@ -1,43 +1,38 @@
-function extractText(e) {
-	return e.textContent;
-}
-
-function makeRemover(table, overlay) {
-	return function() {
-		document.body.removeChild(table);
-		document.body.removeChild(overlay);
-	}
-}
-
 function makeTable() {
-	var ids   = document.getElementsByClassName("searchhistory-col-Num");
-	var terms = document.getElementsByClassName("searchhistory-col-SearchHistory");
-	var hits  = document.getElementsByClassName("searchhistory-col-Results");
-	var out   = "ID	term(s)	results\n";
-	for (var i = 1; i < ids.length; i++) {
-		out = out + extractText(ids[i]) + "\t" +
-			extractText(terms[i]) + "\t" +
-			extractText(hits[i]) + "\n";
-	}
-	return out;
-}
-
-function makeSelect(e) {
-	return function() {
-		e.focus();
-		e.select();
-	}
+    function extractText(e) {
+        return e.textContent;
+    }
+    function addElem(to, type, content) {
+        var elem = document.createElement(type);
+        elem.innerHTML = content;
+        to.appendChild(elem);
+    }
+    var t = document.createElement("table");
+    var tb = document.createElement("tbody");
+    t.appendChild(tb);
+    var ids   = document.getElementsByClassName("searchhistory-col-Num");
+    var terms = document.getElementsByClassName("searchhistory-col-SearchHistory");
+    var hits  = document.getElementsByClassName("searchhistory-col-Results");
+    var tr = document.createElement("tr");
+    addElem(tr, "th", "#");
+    addElem(tr, "th", "Search terms");
+    addElem(tr, "th", "Results");
+    tb.appendChild(tr);
+    for (var i = 1; i < ids.length; i++) {
+        tr = document.createElement("tr");
+        addElem(tr, "td", extractText(ids[i]));
+        addElem(tr, "td", extractText(terms[i]));
+        addElem(tr, "td", extractText(hits[i]));
+        tb.appendChild(tr);
+    }
+    return t;
 }
 
 var resTable = makeTable();
 
-var resText = document.createElement("textarea");
-resText.rows = resTable.split("\n").length;
-resText.style.cssText = "width: 100%;";
-resText.innerHTML = resTable;
-
 var resDiv = document.createElement("div");
-resDiv.innerHTML = "Click anywhere outside this box to close it.";
+resDiv.innerHTML = "Click anywhere outside this box to close it." +
+" Click the table to select it (then copy it somewhere) <hr />";
 resDiv.style.cssText = "background-color: white;" +
 "z-index: 1001;" + "position: fixed;" + "float: left;" + "top: 40px;" +
 "min-width: 800px;" + "padding: 10px;" +
@@ -48,9 +43,31 @@ resOverlay.style.cssText = "background-color: black;" + "opacity: 0.7;" +
 "z-index: 1000;" + "position: fixed;" + "top: 0;" + "left: 0;" +
 "width: 100%;" + "height: 100%;";
 
-resOverlay.onclick = makeRemover(resDiv, resOverlay);
-resText.onclick = makeSelect(resText);
+resOverlay.onclick = function () {
+    document.body.removeChild(resDiv);
+    document.body.removeChild(resOverlay);
+};
+resTable.onclick = function () {
+    // selection script from http://stackoverflow.com/a/2044793
+    var body = document.body, range, sel;
+    if (document.createRange && window.getSelection) {
+        range = document.createRange();
+        sel = window.getSelection();
+        sel.removeAllRanges();
+        try {
+            range.selectNodeContents(resTable);
+            sel.addRange(range);
+        } catch (e) {
+            range.selectNode(resTable);
+            sel.addRange(range);
+        }
+    } else if (body.createTextRange) {
+        range = body.createTextRange();
+        range.moveToElementText(resTable);
+        range.select();
+    }
+}
 
-resDiv.appendChild(resText);
+resDiv.appendChild(resTable);
 document.body.appendChild(resOverlay);
 document.body.appendChild(resDiv);
