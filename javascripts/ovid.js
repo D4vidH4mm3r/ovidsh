@@ -8,16 +8,16 @@ function makeTable() {
         to.appendChild(elem);
     }
     // selection script from http://stackoverflow.com/a/2044793
-    var t = document.createElement("table");
-    var tb = document.createElement("tbody");
-    t.appendChild(tb);
     var ids   = document.getElementsByClassName("searchhistory-col-Num");
     var terms = document.getElementsByClassName("searchhistory-col-SearchHistory");
     var hits  = document.getElementsByClassName("searchhistory-col-Results");
+    var t = document.createElement("table");
+    var tb = document.createElement("tbody");
+    t.appendChild(tb);
     var tr = document.createElement("tr");
-    addElem(tr, "th", "#")
-    addElem(tr, "th", "Søgetermer")
-    addElem(tr, "th", "Resultater")
+    addElem(tr, "th", "ID")
+    addElem(tr, "th", "term(s)")
+    addElem(tr, "th", "results")
     tb.appendChild(tr);
     for (var i = 1; i < ids.length; i++) {
         tr = document.createElement("tr");
