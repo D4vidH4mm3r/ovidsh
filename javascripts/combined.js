@@ -1,15 +1,16 @@
 (function(){
+    // guess which platform we are on
     var database = null;
     if (document.domain.search(/ebscohost/) >= 0) {
         database = "ebsco";
     } else if (document.domain.search(/ovidsp/) >= 0) {
         database = "ovid";
     } else {
-        alert("It seems like this is neither Ovid or EBSCOHOST (or your browser has issues)");
+        alert("It seems like this is neither Ovid nor EBSCOHOST (or maybe your browser has issues)");
         return;
     }
 
-    // the minimum version of jQuery we want
+    // ensure that we have jQuery
     var v = "1.7.0";
 
     // check prior inclusion and version
@@ -29,31 +30,27 @@
     }
 
     function searchHistoryMain() {
-        function trim(t) {
-            return t.replace(/[ \n\t]+/gm, " ").strip();
-        }
-
+        // find the things
         if (database == "ebsco") {
             function extractHits(e) {
-                var text = trim(e.children[0].textContent);
-                /* Typisk "View results(###)" */
+                var text = e.children[0].textContent.trim();
+                /* Looks like "View results(###)" */
                 var start = text.search(/\(/);
                 var stop  = text.search(/\)/);
-                return text.substring(start+1,stop);
+                return text.substring(start+1, stop);
             }
             var ids = $(".searchID");
             var terms = $(".searchTerms");
             var options = $(".historyoptions");
             var hits = $(".actions");
         } else if (database == "ovid") {
-            function extractHits(e) {
-                return e.textContent;
-            }
+            function extractHits(e) { return e.textContent; }
             var ids = $(".searchhistory-col-Num");
             var terms = $(".searchhistory-col-SearchHistory");
             var hits = $(".searchhistory-col-Results");
         }
 
+        // build and display table
         var resTable = $("<table/>");
         var tr = $("<tr/>");
         tr.append($("<th/>").text("ID"));
@@ -132,4 +129,3 @@
         $("body").append(resDiv);
     }
 })();
-
